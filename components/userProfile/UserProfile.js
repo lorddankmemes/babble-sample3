@@ -51,7 +51,7 @@ const UserProfile = () => {
 	// const chainChangedHandler = () => {
 	// 	// reload the page to avoid any errors with chain change mid use of application
 	// 	window.location.reload();
-	// }
+	// lol lmao
 
 	// listen for account changes
 	// window?.ethereum.on('accountsChanged', accountChangedHandler);
