@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ChatContent from '../chatContent/ChatContent';
 import ChatList from '../chatList/ChatList';
-// import UserProfile from '../userProfile/UserProfile';
 
 export default class ChatBody extends Component {
   render() {
@@ -12,7 +11,6 @@ export default class ChatBody extends Component {
             <div className='flex p-10 justify-between'>
               <ChatList />
             </div>
-            {/* <UserProfile /> */}
           </div>
         </aside>
         <section className='relative max-h-full bg-white rounded-lg w-full flex flex-col lg:flex hidden'>
