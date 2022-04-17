@@ -1,8 +1,5 @@
-// https://docs.metamask.io/guide/ethereum-provider.html#using-the-provider
-
-import React, {useState} from 'react';
-import {ethers} from 'ethers';
-import Image from 'next/image';
+import React, { useState } from 'react';
+import { ethers } from 'ethers';
 
 const UserProfile = () => {
 
@@ -15,16 +12,16 @@ const UserProfile = () => {
 		if (window.ethereum && window.ethereum.isMetaMask) {
 			console.log('MetaMask Here!');
 
-			window.ethereum.request({ method: 'eth_requestAccounts'})
-			.then(result => {
-				accountChangedHandler(result[0]);
-				setConnButtonText('Wallet Connected');
-				getAccountBalance(result[0]);
-			})
-			.catch(error => {
-				setErrorMessage(error.message);
-			
-			});
+			window.ethereum.request({ method: 'eth_requestAccounts' })
+				.then(result => {
+					accountChangedHandler(result[0]);
+					setConnButtonText('Wallet Connected');
+					getAccountBalance(result[0]);
+				})
+				.catch(error => {
+					setErrorMessage(error.message);
+
+				});
 
 		} else {
 			console.log('Need to install MetaMask');
@@ -39,51 +36,35 @@ const UserProfile = () => {
 	}
 
 	const getAccountBalance = (account) => {
-		window.ethereum.request({method: 'eth_getBalance', params: [account, 'latest']})
-		.then(balance => {
-			setUserBalance(ethers.utils.formatEther(balance));
-		})
-		.catch(error => {
-			setErrorMessage(error.message);
-		});
+		window.ethereum.request({ method: 'eth_getBalance', params: [account, 'latest'] })
+			.then(balance => {
+				setUserBalance(ethers.utils.formatEther(balance));
+			})
+			.catch(error => {
+				setErrorMessage(error.message);
+			});
 	};
 
-	// const chainChangedHandler = () => {
-	// 	// reload the page to avoid any errors with chain change mid use of application
-	// 	window.location.reload();
-	// lol lmao
-
-	// listen for account changes
-	// window?.ethereum.on('accountsChanged', accountChangedHandler);
-
-	// window?.ethereum.on('chainChanged', chainChangedHandler);
-	
 	return (
-		<div className="main__userprofile">
-      <div className="profile__card user__profile__image">
-        <div className="profile__image">
-          {/* <img src={logo}></img> */}
-          <Image
-            className=""
-            src="/logo.png"
-            priority={true}
-            alt="Bebel Logo"
-            layout="fill"
-          />
-        </div>
-      </div>
-      <div className="btn">
-        <button onClick={connectWalletHandler}>
-          <span>{connButtonText}</span>
-        </button>
-      </div>
-			<div className='accountDisplay'>
-				<span>Address: {defaultAccount}</span>
+		<div className="">
+			<div className=" bg-white rounded-lg overflow-hidden">
+				<div className="sm:flex sm:items-center">
+					<div className='w-[7rem] h-[7rem]'>
+						<img className='rounded-full border border-gray-100 max-w-full h-auto' src='/logo.png' alt='metamask logo' />
+					</div>
+					<div className="mt-4 sm:mt-0 sm:ml-4 text-center sm:text-left">
+						<div className="mt-4">
+							<button onClick={connectWalletHandler} className="text-white bg-indigo-600 hover:bg-indigo-400 border text-xs font-semibold rounded-full px-4 py-1 leading-normal">{connButtonText}</button>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div className='balanceDisplay'>
-				<span>Balance: {userBalance}</span>
+			<div className='mt-4 text-center'>
+				<div className='py-3 rounded-lg overflow-visible font-mono'>
+					<span lassName="text-lg leading-tight">Address: {defaultAccount}</span>
+				</div>
+				{errorMessage}
 			</div>
-			{errorMessage}
 		</div>
 	);
 }

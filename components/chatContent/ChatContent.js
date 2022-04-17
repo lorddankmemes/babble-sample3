@@ -1,6 +1,9 @@
 import React, { Component, useState, createRef, useEffect } from "react";
 import Avatar from "../chatList/Avatar";
 import ChatItem from "./ChatItem";
+import ChatItemMe from "./ChatItemMe";
+import { BsPlusSquare } from "react-icons/bs";
+import { FaPaperPlane } from "react-icons/fa";
 
 export default class ChatContent extends Component {
   messagesEndRef = createRef(null);
@@ -93,56 +96,51 @@ export default class ChatContent extends Component {
 
   render() {
     return (
-      <div className="main__chatcontent">
-        <div className="content__header">
-          <div className="blocks">
-            <div className="current-chatting-user">
-              <Avatar
-                isOnline="active"
-                image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU"
+      <div className="relative max-h-full bg-white rounded-lg w-full flex flex-col lg:flex hidden">
+        <div className="bg-indigo-600 flex px-3 items-center text-white p-2 text-base rounded-t-lg">
+          <Avatar
+            isOnline="active"
+            image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU"
+          />
+          <p>Tim Hover</p>
+        </div>
+        <div className="flex-1 overflow-y-scroll p-5 space-y-5">
+          {this.state.chat.map((itm, index) => {
+            return itm.type != '' ? (
+              <ChatItem
+                animationDelay={index + 2}
+                key={itm.key}
+                user={itm.type}
+                msg={itm.msg}
+              // image={itm.image}
               />
-              <p>Tim Hover</p>
-            </div>
-          </div>
+            ) : (
+              <ChatItemMe
+                animationDelay={index + 2}
+                key={itm.key}
+                user={itm.type}
+                msg={itm.msg}
+              />
+            );
+          })}
+          <div ref={this.messagesEndRef} />
+        </div>
 
-          <div className="blocks">
-            <div className="settings">
-              <button className="btn-nobg">
-                <i className="fa fa-cog"></i>
-              </button>
+        <div className='flex-none p-5'>
+          <div>
+            <div className='relative flex w-full'>
+              <span className='absolute inset-y-0 flex-items-center'>
+                <button type='button' className='inline-flex items-center justify-center rounded-full h-12 w-12 transition dration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:otline-none'>
+                  <BsPlusSquare className="h-6 w-6 text-gray-600" />
+                </button>
+              </span>
+              <input type='text' placeholder='type a message here' className='w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-400 pl-12 bg-gray-100 rounded-full py-3 pr-5' onChange={this.onStateChange} value={this.state.msg} />
+              <div className='ml.5'>
+                <button className='inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-100 ease-in-out text-white bg-indigo-600 hover:bg-indigo-400 focus:outline-none'>
+                  <FaPaperPlane className="h-6 w-6 text-white items-center" />
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="content__body">
-          <div className="chat__items">
-            {this.state.chat.map((itm, index) => {
-              return (
-                <ChatItem
-                  animationDelay={index + 2}
-                  key={itm.key}
-                  user={itm.type ? itm.type : "me"}
-                  msg={itm.msg}
-                  image={itm.image}
-                />
-              );
-            })}
-            <div ref={this.messagesEndRef} />
-          </div>
-        </div>
-        <div className="content__footer">
-          <div className="sendNewMessage">
-            <button className="addFiles">
-              <i className="fa fa-plus"></i>
-            </button>
-            <input
-              type="text"
-              placeholder="Type a message here"
-              onChange={this.onStateChange}
-              value={this.state.msg}
-            />
-            <button className="btnSendMsg" id="sendMsgBtn">
-              <i className="fa fa-paper-plane"></i>
-            </button>
           </div>
         </div>
       </div>

@@ -19,5 +19,20 @@ a {
   box-sizing: border-box;
 }
 
-
 /* my css */
+.scrollbar-width::-webkit-scrollbar {
+  width: 0.25rem;
+  height: 0.25rem;
+}
+.scrollbar-thumb-color::-webkit-scrollbar-thumb {
+  --bg-opacity: 1;
+  background-color: #edf2fe;
+  background-color: rgba(237, 242, 247, var(--bg-opacity));
+  border-radius: 0.25rem;
+}
+.dark .dark\:scrollbar-thumb-color-dark::-webkit-scrollbar-thumb {
+  --bg-opacity: 1;
+  background-color: #1f2937;
+  background-color: rgba(31, 41, 55, var(--bg-opacity));
+  border-radius: 0.25rem;
+}

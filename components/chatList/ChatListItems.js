@@ -21,9 +21,8 @@ export default class ChatListItems extends Component {
       <div
         style={{ animationDelay: `0.${this.props.animationDelay}s` }}
         onClick={this.selectChat}
-        className={`chatlist__item ${
-          this.props.active ? this.props.active : ""
-        } `}
+        className={`cursor-pointer flex p-3 ${this.props.active ? this.props.active : ""
+          } `}
       >
         <Avatar
           image={
@@ -32,9 +31,9 @@ export default class ChatListItems extends Component {
           isOnline={this.props.isOnline}
         />
 
-        <div className="userMeta">
+        <div className="justify-between p-2">
           <p>{this.props.name}</p>
-          <span className="activeTime">32 mins ago</span>
+          <span className="text-gray-700 text-xs">32 mins ago</span>
         </div>
       </div>
     );
