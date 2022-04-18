@@ -49,7 +49,7 @@ const UserProfile = () => {
 		<div className="">
 			<div className=" bg-white rounded-lg overflow-hidden">
 				<div className="sm:flex sm:items-center">
-					<div className='w-[7rem] h-[7rem]'>
+					<div className='w-[5rem] h-[5rem]'>
 						<img className='rounded-full border border-gray-100 max-w-full h-auto' src='/logo.png' alt='metamask logo' />
 					</div>
 					<div className="mt-4 sm:mt-0 sm:ml-4 text-center sm:text-left">

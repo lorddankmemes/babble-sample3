@@ -96,7 +96,7 @@ export default class ChatContent extends Component {
 
   render() {
     return (
-      <div className="relative max-h-full bg-white rounded-lg w-full flex flex-col lg:flex hidden">
+      <div className="relative max-h-full h-full bg-white rounded-lg w-full flex flex-col lg:flex hidden">
         <div className="bg-indigo-600 flex px-3 items-center text-white p-2 text-base rounded-t-lg">
           <Avatar
             isOnline="active"

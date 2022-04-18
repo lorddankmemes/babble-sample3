@@ -77,7 +77,7 @@ const ChatList = () => {
             <UserProfile />
             <button
                 onClick={openModal}
-                className={` flex truncate my-4 bg-white w-full border-2 border-blue rounded-lg h-11 p-5 inline-block items-center 'opacity-50 cursor-not-allowed'}`}
+                className={` flex truncate my-2 bg-white w-full border-2 border-blue rounded-lg h-11 p-5 inline-block items-center 'opacity-50 cursor-not-allowed'}`}
             >
                 <AiOutlinePlus />
                 <span>New Conversation</span>
@@ -171,8 +171,8 @@ const ChatList = () => {
                 </div>
             </div>
 
-            <div className="flex-1 scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300 h-96 overflow-y-scroll">
-                <div className='w-full space-y-8'>
+            <div className="flex-1 h-[38rem] overflow-y-scroll">
+                <div className=' space-y-4'>
                     {getAllChats.map((item, index) => {
                         return (
                             <ChatListItems

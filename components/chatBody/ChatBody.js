@@ -7,8 +7,8 @@ export default class ChatBody extends Component {
     return (
       <div className='max-h-full h-full flex flex-row'>
         <aside className='w-full lg:w-2/6 bg-white rounded-lg mr-5'>
-          <div className='max-w-full h-full w-full flex flex-col'>
-            <div className='flex p-10 justify-between'>
+          <div className='flex flex-col'>
+            <div className='flex p-5 justify-between'>
               <ChatList />
             </div>
           </div>
