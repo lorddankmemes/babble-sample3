@@ -4,9 +4,11 @@ import { AiOutlineSearch, AiOutlinePlus } from "react-icons/ai";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import UserProfile from '../userProfile/UserProfile';
+import useMatrixOrg from "../../services/useMatrix";
 
 
 const ChatList = () => {
+    const { mCreateRoom } = useMatrixOrg()
     const [getAllChats, setAllChats] = useState([
         {
             image:
@@ -59,18 +61,30 @@ const ChatList = () => {
     ]);
 
     let [isOpen, setIsOpen] = useState(true)
+    const [getPublicAddress, setPublicAddress] = useState()
 
     function closeModal() {
         setIsOpen(false)
+        //create room
+        mCreateRoom({
+            room_alias_name: getPublicAddress,
+        })
     }
 
     function openModal() {
         setIsOpen(true)
+        setPublicAddress("")
     }
 
     useEffect(() => {
         setAllChats(getAllChats)
+        setPublicAddress("")
     }, [])
+
+    const handleChange = (e) => {
+        const { value } = e.target;
+        setPublicAddress(value)
+    }
 
     return (
         <div className='flex-1'>
@@ -133,7 +147,14 @@ const ChatList = () => {
                                         </p>
                                         <div clasName="mb-4">
                                             <label className="block text-gray-700 text-sm font-bold mb-2" >
-                                                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Metamask CID" />
+                                                <input
+                                                    onChange={handleChange}
+                                                    value={getPublicAddress || ''}
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                    id="username"
+                                                    type="text"
+                                                    placeholder="Metamask CID"
+                                                />
                                             </label>
                                         </div>
                                     </div>

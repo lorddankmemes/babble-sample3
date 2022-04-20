@@ -117,33 +117,32 @@ function useMatrixOrg() {
         console.log(data)
     }
 
-
-
     const mCreateRoom = async ({
         room_alias_name,
-        visibility,
-        invite,
-        name,
-        topic,
     }) => {
         try {
             const options = {}
 
             if (room_alias_name) options.room_alias_name = room_alias_name
-            if (visibility) options.visibility = visibility
-            if (invite) options.invite = invite
-            if (name) options.name = name
-            if (topic) options.topic = topic
+            options.visibility = 'public'
+            options.invite = ['@' + room_alias_name + ':matrix-synapse.appserver.projectoasis.io']
+            if (room_alias_name) options.name = room_alias_name
+            if (room_alias_name) options.topic = room_alias_name
 
-            await client.createRoom(options, (err, data) => {
-                console.log("ERROR IN CREATING ROOM")
+            await client.createRoom(options, async (err, data) => {
                 if (data) {
                     console.log(data)
                 } else {
-                    console.log(err)
-                    // room already exists
-                    // NEED TO JOIN ROOM
                     console.log("BOLEH SEND MESSAGE TERUS")
+                    await client.joinRoom("#" + room_alias_name + ":matrix-synapse.appserver.projectoasis.io", {
+                        syncRoom: true,
+                    }, (err, data) => {
+                        console.log("JOIN ROOM")
+                        if (data) {
+                            console.log("SUCCESS")
+                            console.log(data)
+                        }
+                    })
                 }
             })
         } catch (e) {
