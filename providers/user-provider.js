@@ -4,9 +4,21 @@ export const User = createContext();
 
 
 const initialState = {
-    access_token: "",
-    public_address: "",
-    amount: 0.0,
+    access_token: typeof window !== 'undefined' ?
+        localStorage.getItem('access_token')
+            ? localStorage.getItem('access_token')
+            : ""
+        : "",
+    public_address: typeof window !== 'undefined' ?
+        localStorage.getItem('public_address')
+            ? localStorage.getItem('public_address')
+            : ""
+        : "",
+    amount: typeof window !== 'undefined' ?
+        localStorage.getItem('amount')
+            ? localStorage.getItem('amount')// maybe kena convert to double
+            : 0.0
+        : 0.0,
 }
 
 function reducer(state, action) {

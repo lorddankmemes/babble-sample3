@@ -1,13 +1,13 @@
-// import React from 'react'
+
 import sdk from "matrix-js-sdk"
-// import { useContext } from 'react'
+import { useContext } from 'react'
 import crypto from 'crypto'
 import axios from 'axios'
-// import { User } from "../providers/user-provider"
+import { User } from "../providers/user-provider"
 
 function useMatrixOrg() {
 
-    // const userContext = useContext(User);
+    const userContext = useContext(User);
 
     const client = sdk.createClient({
         baseUrl: "https://matrix-synapse.appserver.projectoasis.io/",
@@ -86,6 +86,8 @@ function useMatrixOrg() {
                 (err, data) => {
                     if (data) {
                         console.log(data.access_token)
+
+                        userContext.dispatch({ type: "SET_ACCESS_TOKEN", payload: data.access_token })
                         // DATA ACCEPTED AKAN STORE IN PROVIDER/LOCAL STORAGE
                     } else {
                         mRegister({

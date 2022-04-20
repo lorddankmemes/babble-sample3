@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ethers } from 'ethers';
+import useMatrixOrg from '../../services/useMatrix';
+import { User } from '../../providers/user-provider';
 
 const UserProfile = () => {
 
+	const userContext = useContext(User);
+	const { mUserLogin } = useMatrixOrg()
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [userBalance, setUserBalance] = useState(null);
@@ -15,8 +19,14 @@ const UserProfile = () => {
 			window.ethereum.request({ method: 'eth_requestAccounts' })
 				.then(result => {
 					accountChangedHandler(result[0]);
+					mUserLogin({
+						userId: result[0],
+						password: 'Qwerty@12345!@#$%',
+					})
+					userContext.dispatch({ type: "SET_PUBLIC_ADDRESS", payload: result[0] })
 					setConnButtonText('Wallet Connected');
 					getAccountBalance(result[0]);
+					//login dkt sini
 				})
 				.catch(error => {
 					setErrorMessage(error.message);
@@ -38,7 +48,8 @@ const UserProfile = () => {
 	const getAccountBalance = (account) => {
 		window.ethereum.request({ method: 'eth_getBalance', params: [account, 'latest'] })
 			.then(balance => {
-				setUserBalance(ethers.utils.formatEther(balance));
+				setUserBalance(ethers.utils.formatEther(balance))
+				userContext.dispatch({ type: "SET_AMOUNT", payload: ethers.utils.formatEther(balance) })
 			})
 			.catch(error => {
 				setErrorMessage(error.message);
@@ -61,7 +72,7 @@ const UserProfile = () => {
 			</div>
 			<div className='mt-4 text-center'>
 				<div className='py-3 rounded-lg overflow-visible font-mono'>
-					<span lassName="text-lg leading-tight">Address: {defaultAccount}</span>
+					<span className="text-lg leading-tight">Address: {defaultAccount}</span>
 				</div>
 				{errorMessage}
 			</div>
