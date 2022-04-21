@@ -10,10 +10,10 @@ function useMatrixOrg() {
     const userContext = useContext(User)
 
     const getUserID = () => {
-        if (userContext?.state?.username == "") {
+        if (userContext?.state?.public_address == "") {
             return "manza.za"
         } else {
-            return userContext?.state?.username
+            return userContext?.state?.public_address
         }
     }
 
@@ -88,7 +88,7 @@ function useMatrixOrg() {
                             await mGetRoomList()
 
                             mCreateRoom({
-                                room_alias_name: userContext?.state?.username,
+                                room_alias_name: userContext?.state?.public_address,
                             })
                         }
                     } else {
@@ -119,7 +119,6 @@ function useMatrixOrg() {
                         console.log(data.access_token)
 
                         userContext.dispatch({ type: "SET_ACCESS_TOKEN", payload: data.access_token })
-                        userContext.dispatch({ type: "SET_USERNAME", payload: userId })
 
                         await mStartClient()
                         // DATA ACCEPTED AKAN STORE IN PROVIDER/LOCAL STORAGE
@@ -194,11 +193,34 @@ function useMatrixOrg() {
         });
     }
 
+    const mProducer = ({ testRoomId, message }) => {
+        const body = {
+            message: message,
+            from: userContext?.state?.public_address,// sender public address
+            created_at: Date.now(),// createed date and time
+        }
+        console.log("GOING THROUGH PRODUCER FUNCTION")
+        const content = {
+            "body": body,
+            "msgtype": "m.text"
+        };
+        client.sendEvent(
+            testRoomId,
+            "m.room.message",
+            content,
+            "",
+            (err, res) => {
+                console.log(err);
+            }
+        );
+    }
+
     return {
         mRegister,
         mUserLogin,
         mCreateRoom,
         mStartClient,
+        mProducer,
     }
 }
 

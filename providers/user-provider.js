@@ -14,11 +14,6 @@ const initialState = {
             ? localStorage.getItem('public_address')
             : ""
         : "",
-    username: typeof window !== 'undefined' ?
-        localStorage.getItem('username')
-            ? localStorage.getItem('username')
-            : ""
-        : "",
     amount: typeof window !== 'undefined' ?
         localStorage.getItem('amount')
             ? localStorage.getItem('amount')// maybe kena convert to double
@@ -34,9 +29,6 @@ function reducer(state, action) {
         case 'SET_PUBLIC_ADDRESS':
             localStorage.setItem('public_address', action.payload)
             return { ...state, public_address: action.payload }
-        case 'SET_USERNAME':
-            localStorage.setItem('username', action.payload)
-            return { ...state, username: action.payload }
         case 'SET_AMOUNT':
             localStorage.setItem('amount', action.payload)
             return { ...state, amount: action.payload }
@@ -48,7 +40,6 @@ function reducer(state, action) {
                 ...state,
                 access_token: "",
                 public_address: "",
-                username: "",
                 amount: 0.0,
             }
         default:
