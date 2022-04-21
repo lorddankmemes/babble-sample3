@@ -7,12 +7,28 @@ import { User } from "../providers/user-provider"
 
 function useMatrixOrg() {
 
-    const userContext = useContext(User);
+    const userContext = useContext(User)
+
+    const getUserID = () => {
+        if (userContext?.state?.username == "") {
+            return "manza.za"
+        } else {
+            return userContext?.state?.username
+        }
+    }
+
+    const getAccessToken = () => {
+        if (userContext?.state?.access_token == "") {
+            return "syt_emFpbWFuemFfMg_QFsvMArxdffJkZJlVlBs_2X1qv9"
+        } else {
+            return userContext?.state?.access_token
+        }
+    }
 
     const client = sdk.createClient({
         baseUrl: "https://matrix-synapse.appserver.projectoasis.io/",
-        accessToken: "syt_emFpbWFuemFfMg_QFsvMArxdffJkZJlVlBs_2X1qv9",
-        userId: "@zaimanza_2:matrix-synapse.appserver.projectoasis.io"
+        accessToken: getAccessToken(),
+        userId: "@" + getUserID() + ":matrix-synapse.appserver.projectoasis.io"
     })
 
     const createHMAC = async ({ username, password }) => {
@@ -57,20 +73,35 @@ function useMatrixOrg() {
 
     // RUN THIS FUNCTION WHEN APP START
     const mStartClient = async () => {
-        // await client.startClient({ initialSyncLimit: 10 });
-        await client.startClient();
+        try {
+            // await client.startClient({ initialSyncLimit: 10 });
+            await client.startClient();
 
-        client.once('sync', function (state, prevState, res) {
-            if (state === 'PREPARED') {
-                console.log("prepared")
-                console.log(state)
-                console.log(prevState)
-                console.log(res)
-            } else {
-                console.log(state);
-                // process.exit(1);
-            }
-        });
+            client.once('sync', async function (state, prevState, res) {
+                try {
+                    if (state === 'PREPARED') {
+                        console.log("prepared")
+                        console.log(state)
+                        console.log(prevState)
+                        console.log(res)
+                        if (userContext?.state?.access_token != "") {
+                            await mGetRoomList()
+
+                            mCreateRoom({
+                                room_alias_name: userContext?.state?.username,
+                            })
+                        }
+                    } else {
+                        console.log(state);
+                        // process.exit(1);
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+            });
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     // ATTEMPT TO LOGIN
@@ -83,11 +114,14 @@ function useMatrixOrg() {
                     "user": '@' + userId + ':matrix-synapse.appserver.projectoasis.io',
                     "password": password
                 },
-                (err, data) => {
+                async (err, data) => {
                     if (data) {
                         console.log(data.access_token)
 
                         userContext.dispatch({ type: "SET_ACCESS_TOKEN", payload: data.access_token })
+                        userContext.dispatch({ type: "SET_USERNAME", payload: userId })
+
+                        await mStartClient()
                         // DATA ACCEPTED AKAN STORE IN PROVIDER/LOCAL STORAGE
                     } else {
                         mRegister({
@@ -149,6 +183,15 @@ function useMatrixOrg() {
             console.log("CREATE ROOM ERROR")
             console.log(e)
         }
+    }
+
+    const mGetRoomList = () => {
+        console.log("ENTERING GET RROM LIST FUNCTION")
+        var rooms = client.getRooms();
+        console.log(rooms)
+        rooms.forEach(room => {
+            console.log(room.roomId);
+        });
     }
 
     return {
