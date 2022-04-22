@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ChatListItems from "./ChatListItems";
 import { AiOutlineSearch, AiOutlinePlus } from "react-icons/ai";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import UserProfile from '../userProfile/UserProfile';
 import useMatrixOrg from "../../services/useMatrix";
+import { User } from "../../providers/user-provider";
 
 
 const ChatList = () => {
+    const userContext = useContext(User)
     const { mCreateRoom } = useMatrixOrg()
     const [getAllChats, setAllChats] = useState([
         {
@@ -194,7 +196,17 @@ const ChatList = () => {
 
             <div className="flex-1 h-[38rem] overflow-y-scroll">
                 <div className=' space-y-4'>
-                    {getAllChats.map((item, index) => {
+                    {
+                        userContext?.state?.rooms.map((room, index) => {
+                            return (
+                                <ChatListItems
+                                    name={room.name}
+                                    key={room.roomId}
+                                />
+                            )
+                        })
+                    }
+                    {/* {getAllChats.map((item, index) => {
                         return (
                             <ChatListItems
                                 name={item.name}
@@ -205,7 +217,7 @@ const ChatList = () => {
                                 image={item.image}
                             />
                         );
-                    })}
+                    })} */}
                 </div>
             </div>
         </div>

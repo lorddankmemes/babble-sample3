@@ -187,9 +187,10 @@ function useMatrixOrg() {
     const mGetRoomList = () => {
         console.log("ENTERING GET RROM LIST FUNCTION")
         var rooms = client.getRooms();
+        userContext.dispatch({ type: "SET_ROOMS", payload: rooms })
         console.log(rooms)
-        rooms.forEach(room => {
-            console.log(room.roomId);
+        userContext.state.rooms.forEach(room => {
+            console.log(room);
         });
     }
 
