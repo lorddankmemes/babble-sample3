@@ -37,8 +37,6 @@ function useMatrixOrg() {
         try {
             const generatedNonce = await axios.get('https://matrix-synapse.appserver.projectoasis.io/_synapse/admin/v1/register')
             const key = "f~hnQt-TIuH+b;jHSXA89+F;^uMn*Yl^9YQWjR@auWv6p*b9hW"
-            console.log("GENERATED NONCE")
-            console.log(generatedNonce?.data?.nonce)
             const cryptedHMAC = await crypto
                 .createHmac('sha1', key)
                 .update(generatedNonce?.data?.nonce)
@@ -50,9 +48,6 @@ function useMatrixOrg() {
                 .update("notadmin")
                 .digest('hex')
 
-            console.log(cryptedHMAC)
-            console.log("CREATE HMAC SUCCESS")
-
             const generatedRegister = await axios.post('https://matrix-synapse.appserver.projectoasis.io/_synapse/admin/v1/register', {
                 nonce: generatedNonce?.data?.nonce,
                 username: username,
@@ -60,7 +55,6 @@ function useMatrixOrg() {
                 admin: false,
                 mac: cryptedHMAC,
             })
-            console.log(generatedRegister)
             if (generatedRegister) {
                 mUserLogin({
                     userId: username,
@@ -68,9 +62,10 @@ function useMatrixOrg() {
                 })
             }
             // DATA ACCEPTED AKAN STORE IN PROVIDER/LOCAL STORAGE
-            console.log("REGISTER ACCOUNT SUCCESS")
             return cryptedHMAC
-        } catch (e) { console.log(e) }
+        } catch (e) {
+            // 
+        }
     }
 
     // RUN THIS FUNCTION WHEN APP START
@@ -82,10 +77,6 @@ function useMatrixOrg() {
             client.once('sync', async function (state, prevState, res) {
                 try {
                     if (state === 'PREPARED') {
-                        console.log("prepared")
-                        console.log(state)
-                        console.log(prevState)
-                        console.log(res)
                         if (userContext?.state?.access_token != "") {
                             await mGetRoomList()
 
@@ -94,22 +85,20 @@ function useMatrixOrg() {
                             })
                         }
                     } else {
-                        console.log(state);
                         // process.exit(1);
                     }
                 } catch (e) {
-                    console.log(e)
+                    //  
                 }
             });
         } catch (e) {
-            console.log(e)
+            //   
         }
     }
 
     // ATTEMPT TO LOGIN
     const mUserLogin = ({ userId, password }) => {
         try {
-            console.log("PROCESSING LOGIN")
             client.login(
                 "m.login.password",
                 {
@@ -118,7 +107,6 @@ function useMatrixOrg() {
                 },
                 async (err, data) => {
                     if (data) {
-                        console.log(data.access_token)
 
                         userContext.dispatch({ type: "SET_ACCESS_TOKEN", payload: data.access_token })
 
@@ -133,8 +121,7 @@ function useMatrixOrg() {
                 }
             )
         } catch (e) {
-            console.log("LOGIN ERROR")
-            console.log(e)
+            //    
         }
     }
 
@@ -142,14 +129,10 @@ function useMatrixOrg() {
         username,
         password,
     }) => {
-        console.log("IN REGISTER FUNCTION START")
         const data = await createHMAC({
             username: username,
             password: password,
         })
-
-        console.log("IN REGISTER FUNCTION END")
-        console.log(data)
     }
 
     const mCreateRoom = async ({
@@ -166,33 +149,27 @@ function useMatrixOrg() {
 
             await client.createRoom(options, async (err, data) => {
                 if (data) {
-                    console.log(data)
+                    //  
                 } else {
-                    console.log("BOLEH SEND MESSAGE TERUS")
                     await client.joinRoom("#" + room_alias_name + ":matrix-synapse.appserver.projectoasis.io", {
                         syncRoom: true,
                     }, (err, data) => {
-                        console.log("JOIN ROOM")
                         if (data) {
-                            console.log("SUCCESS")
-                            console.log(data)
+                            //   
                         }
                     })
                 }
             })
         } catch (e) {
-            console.log("CREATE ROOM ERROR")
-            console.log(e)
+            //  
         }
     }
 
     const mGetRoomList = () => {
-        console.log("ENTERING GET RROM LIST FUNCTION")
         var rooms = client.getRooms();
         chatContext.dispatch({ type: "SET_ROOMS", payload: rooms })
-        console.log(rooms)
         chatContext.state.rooms.forEach(room => {
-            console.log(room);
+            // 
         });
     }
 
@@ -202,7 +179,6 @@ function useMatrixOrg() {
             from: userContext?.state?.public_address,// sender public address
             created_at: Date.now(),// createed date and time
         }
-        console.log("GOING THROUGH PRODUCER FUNCTION")
         const content = {
             "body": body,
             "msgtype": "m.text"
@@ -213,7 +189,7 @@ function useMatrixOrg() {
             content,
             "",
             (err, res) => {
-                console.log(err);
+                //    
             }
         );
     }

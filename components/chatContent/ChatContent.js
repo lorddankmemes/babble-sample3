@@ -1,12 +1,14 @@
-import React, { Component, useState, createRef, useEffect } from "react"
+import React, { useContext, useState, createRef, useEffect } from "react"
 import Avatar from "../chatList/Avatar"
 import ChatItem from "./ChatItem"
 import ChatItemMe from "./ChatItemMe"
 import { BsPlusSquare } from "react-icons/bs"
 import { FaPaperPlane } from "react-icons/fa"
+import { Chat } from "../../providers/chat-provider"
 
 function ChatContent() {
 
+  const chatContext = useContext(Chat)
   const [getMsg, setMsg] = useState()
   const [getChat, setChat] = useState([])
 
@@ -98,8 +100,25 @@ function ChatContent() {
   const onStateChange = (e) => {
     setMsg(e.target.value)
   }
+
+  const sendMessageHandler = () => {
+    chatContext.dispatch({
+      type: "ADD_CONVERSATION",
+      payload: {
+        roomName: "room one",
+        conversation: [
+          {
+            message: "hi",
+            from: "aiman",
+            created_at: "today",
+          }
+        ]
+      }
+    })
+  }
+
   return (
-    <div className="relative max-h-full h-full bg-white rounded-lg w-full flex flex-col lg:flex hidden">
+    <div className="relative max-h-full h-full bg-white rounded-lg w-full flex flex-col lg:flex hidden" >
       <div className="bg-indigo-600 flex px-3 items-center text-white p-2 text-base rounded-t-lg">
         <Avatar
           isOnline="active"
@@ -146,7 +165,10 @@ function ChatContent() {
 
             />
             <div className='ml.5'>
-              <button className='inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-100 ease-in-out text-white bg-indigo-600 hover:bg-indigo-400 focus:outline-none'>
+              <button
+                onClick={sendMessageHandler}
+                className='inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-100 ease-in-out text-white bg-indigo-600 hover:bg-indigo-400 focus:outline-none'
+              >
                 <FaPaperPlane className="h-6 w-6 text-white items-center" />
               </button>
             </div>
