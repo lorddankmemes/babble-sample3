@@ -104,33 +104,36 @@ function ChatContent() {
   }
 
   const sendMessageHandler = () => {
-    chatContext.dispatch({
-      type: "ADD_CONVERSATION",
-      payload: {
-        roomName: "0x31f93c195a3f4f11af1f5bce5dc94461b0992cf5",
-        conversation: [
-          {
-            message: "hi",
-            from: userContext?.state?.public_address,
-            created_at: "today",
-          }
-        ]
-      }
-    })
+    if (getMsg != "") {
+      chatContext.dispatch({
+        type: "ADD_CONVERSATION",
+        payload: {
+          roomName: "0x31f93c195a3f4f11af1f5bce5dc94461b0992cf5",
+          conversation: [
+            {
+              message: getMsg,
+              from: userContext?.state?.public_address,
+              created_at: "today",
+            }
+          ]
+        }
+      })
+      setMsg("")
+    }
   }
 
   const getRoomDetail = () => {
-    console.log("START_FILTER")
+    // console.log("START_FILTER")
     const rr = chatContext.state.conversations.find(
       conversation => {
-        console.log(conversation.roomName)
-        console.log(chatContext?.state?.selected_room)
+        // console.log(conversation.roomName)
+        // console.log(chatContext?.state?.selected_room)
         return conversation.roomName == chatContext?.state?.selected_room
       }
     )
-    console.log("THIS_IS_THE_DATA")
-    console.log(rr.conversation)
-    return rr.conversation
+    // console.log("THIS_IS_THE_DATA")
+    // console.log(rr?.conversation ?? [])
+    return rr?.conversation ?? []
   }
 
   return (

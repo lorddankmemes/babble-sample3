@@ -202,6 +202,8 @@ const ChatList = () => {
                 <div className=' space-y-4'>
                     {
                         chatContext?.state?.rooms.map((room, index) => {
+                            console.log("LOOPING ROOM")
+                            console.log(room)
                             return (
                                 <button
                                     onClick={() => {
