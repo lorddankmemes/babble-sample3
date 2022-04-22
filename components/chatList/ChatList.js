@@ -68,9 +68,11 @@ const ChatList = () => {
     function closeModal() {
         setIsOpen(false)
         //create room
-        mCreateRoom({
-            room_alias_name: getPublicAddress,
-        })
+        if (getPublicAddress != "") {
+            mCreateRoom({
+                room_alias_name: getPublicAddress,
+            })
+        }
     }
 
     function openModal() {

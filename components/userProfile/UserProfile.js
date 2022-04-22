@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import useMatrixOrg from '../../services/useMatrix';
 import { User } from '../../providers/user-provider';
@@ -10,7 +10,16 @@ const UserProfile = () => {
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [userBalance, setUserBalance] = useState(null);
-	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
+
+
+	useEffect(() => {
+		if (userContext?.state?.public_address != "") {
+			mUserLogin({
+				userId: userContext?.state?.public_address,
+				password: 'Qwerty@12345!@#$%',
+			})
+		}
+	}, [userContext?.state?.public_address])
 
 	const connectWalletHandler = () => {
 		if (window.ethereum && window.ethereum.isMetaMask) {
@@ -24,7 +33,6 @@ const UserProfile = () => {
 						password: 'Qwerty@12345!@#$%',
 					})
 					userContext.dispatch({ type: "SET_PUBLIC_ADDRESS", payload: result[0] })
-					setConnButtonText('Wallet Connected');
 					getAccountBalance(result[0]);
 					//login dkt sini
 				})
@@ -65,14 +73,20 @@ const UserProfile = () => {
 					</div>
 					<div className="mt-4 sm:mt-0 sm:ml-4 text-center sm:text-left">
 						<div className="mt-4">
-							<button onClick={connectWalletHandler} className="text-white bg-indigo-600 hover:bg-indigo-400 border text-xs font-semibold rounded-full px-4 py-1 leading-normal">{connButtonText}</button>
+							<button
+								onClick={connectWalletHandler}
+								className="text-white bg-indigo-600 hover:bg-indigo-400 border text-xs font-semibold rounded-full px-4 py-1 leading-normal">{
+									(userContext?.state?.public_address != "") ?
+										"Wallet Connected" :
+										"Connect Wallet"
+								}</button>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div className='mt-4 text-center'>
 				<div className='py-3 rounded-lg overflow-visible font-mono'>
-					<span className="text-lg leading-tight">Address: {defaultAccount}</span>
+					<span className="text-lg leading-tight">Address: {userContext?.state?.public_address}</span>
 				</div>
 				{errorMessage}
 			</div>
