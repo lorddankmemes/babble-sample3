@@ -21,22 +21,21 @@ function reducer(state, action) {
             console.log(existChat)
             const newConversations = () => {
                 if (existChat) {
-                    // return state.conversations.map((conversation) => {
-                    //     if (conversation.roomName == action.payload.roomName) {
-                    //         // letak dalam conversation message
-                    //         const tempCon = conversation
-                    //         console.log("BEFORE")
-                    //         console.log(tempCon)
-                    //         tempCon.conversation.push(action.payload.conversation[0])
-                    //         console.log("AFTER")
-                    //         console.log(tempCon)
-                    //         return conversation
-                    //     } else {
-                    //         return conversation
-                    //     }
-                    // })
-                    console.log("ADD")
-                    return state.conversations
+                    return state.conversations.map((conversation) => {
+                        if (conversation.roomName == action.payload.roomName) {
+                            // letak dalam conversation message
+                            // const tempCon = conversation
+                            // console.log("BEFORE")
+                            // console.log(tempCon)
+                            // tempCon.conversation.push(action.payload.conversation[0])
+                            // console.log("AFTER")
+                            // console.log(tempCon)
+                            console.log("SAMA")
+                            return conversation
+                        } else {
+                            return conversation
+                        }
+                    })
                 } else {
                     console.log("ELSE STATEMENT")
                     const tempArr = []
@@ -46,24 +45,11 @@ function reducer(state, action) {
                 }
             }
             console.log("RETURN ANSWER")
-            // const newConversations = existChat
-            //     ? state.conversations.map((conversation) => {
-            //         if (conversation.roomName == action.payload.roomName) {
-            //             // letak dalam conversation message
-            //             const tempCon = conversation
-            //             console.log("BEFORE")
-            //             console.log(tempCon)
-            //             tempCon.conversation.push(action.payload.conversation[0])
-            //             console.log("AFTER")
-            //             console.log(tempCon)
-            //             return conversation
-            //         } else {
-            //             return conversation
-            //         }
-            //     }) : [action.payload]
-            // console.log("UPDATED_CONVERSATION")
-            // console.log(newConversations)
-            return { ...state, conversations: newConversations() }
+
+            const setNewChats = newConversations()
+            console.log("FINAL_OUTPUT")
+            console.log(setNewChats)
+            return { ...state, conversations: setNewChats }
         }
         case 'CLEAR_CHAT_PROVIDER':
             return {
