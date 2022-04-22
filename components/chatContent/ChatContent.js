@@ -5,9 +5,11 @@ import ChatItemMe from "./ChatItemMe"
 import { BsPlusSquare } from "react-icons/bs"
 import { FaPaperPlane } from "react-icons/fa"
 import { Chat } from "../../providers/chat-provider"
+import { User } from "../../providers/user-provider"
 
 function ChatContent() {
 
+  const userContext = useContext(User)
   const chatContext = useContext(Chat)
   const [getMsg, setMsg] = useState()
   const [getChat, setChat] = useState([])
@@ -105,16 +107,30 @@ function ChatContent() {
     chatContext.dispatch({
       type: "ADD_CONVERSATION",
       payload: {
-        roomName: "room one",
+        roomName: "0x31f93c195a3f4f11af1f5bce5dc94461b0992cf5",
         conversation: [
           {
             message: "hi",
-            from: "aiman",
+            from: userContext?.state?.public_address,
             created_at: "today",
           }
         ]
       }
     })
+  }
+
+  const getRoomDetail = () => {
+    console.log("START_FILTER")
+    const rr = chatContext.state.conversations.find(
+      conversation => {
+        console.log(conversation.roomName)
+        console.log(chatContext?.state?.selected_room)
+        return conversation.roomName == chatContext?.state?.selected_room
+      }
+    )
+    console.log("THIS_IS_THE_DATA")
+    console.log(rr.conversation)
+    return rr.conversation
   }
 
   return (
@@ -124,10 +140,29 @@ function ChatContent() {
           isOnline="active"
           image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU"
         />
-        <p>Tim Hover</p>
+        <p>{chatContext?.state?.selected_room}</p>
       </div>
       <div className="flex-1 overflow-y-scroll p-5 space-y-5">
-        {getChat.map((itm, index) => {
+        {
+          getRoomDetail().map((conversation, index) => {
+            return conversation.from != userContext?.state?.public_address ? (
+              <ChatItem
+                animationDelay={index + 2}
+                key={conversation.from}
+                user={conversation.from}
+                msg={conversation.message}
+              // image={itm.image}
+              />
+            ) : (
+              <ChatItemMe
+                animationDelay={index + 2}
+                key={conversation.from}
+                user={conversation.from}
+                msg={conversation.message}
+              />
+            )
+          })}
+        {/* {getChat.map((itm, index) => {
           return itm.type != '' ? (
             <ChatItem
               animationDelay={index + 2}
@@ -143,8 +178,8 @@ function ChatContent() {
               user={itm.type}
               msg={itm.msg}
             />
-          );
-        })}
+          )
+        })} */}
         <div ref={messagesEndRef} />
       </div>
 

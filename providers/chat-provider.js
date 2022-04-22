@@ -5,13 +5,16 @@ export const Chat = createContext();
 
 const initialState = {
     rooms: [],
-    conversations: []
+    conversations: [],
+    selected_room: ""
 }
 
 function reducer(state, action) {
     switch (action.type) {
         case 'SET_ROOMS':
             return { ...state, rooms: action.payload }
+        case 'SET_SELECTED_ROOM':
+            return { ...state, selected_room: action.payload }
         case 'ADD_CONVERSATION': {
             const existChat = state.conversations.find(
                 (conversation) => conversation.roomName == action.payload.roomName
@@ -38,12 +41,12 @@ function reducer(state, action) {
             }
 
             const setNewChats = newConversations()
-            console.log(setNewChats)
-            setNewChats.map((c) => {
-                c.conversation.map((con) => {
-                    console.log("HER")
-                })
-            })
+            // console.log(setNewChats)
+            // setNewChats.map((c) => {
+            //     c.conversation.map((con) => {
+            //         console.log("HER")
+            //     })
+            // })
             return { ...state, conversations: setNewChats }
         }
         case 'CLEAR_CHAT_PROVIDER':

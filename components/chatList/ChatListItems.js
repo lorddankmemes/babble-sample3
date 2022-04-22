@@ -20,7 +20,6 @@ export default class ChatListItems extends Component {
     return (
       <div
         style={{ animationDelay: `0.${this.props.animationDelay}s` }}
-        onClick={this.selectChat}
         className={`cursor-pointer flex p-3 ${this.props.active ? this.props.active : ""
           } `}
       >

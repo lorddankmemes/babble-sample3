@@ -203,25 +203,22 @@ const ChatList = () => {
                     {
                         chatContext?.state?.rooms.map((room, index) => {
                             return (
-                                <ChatListItems
-                                    name={room.name}
+                                <button
+                                    onClick={() => {
+                                        chatContext.dispatch({
+                                            type: "SET_SELECTED_ROOM",
+                                            payload: room.name
+                                        })
+                                    }}
                                     key={room.roomId}
-                                />
+                                >
+                                    <ChatListItems
+                                        name={room.name}
+                                    />
+                                </button>
                             )
                         })
                     }
-                    {/* {getAllChats.map((item, index) => {
-                        return (
-                            <ChatListItems
-                                name={item.name}
-                                key={item.id}
-                                animationDelay={index + 1}
-                                active={item.active ? "active" : ""}
-                                isOnline={item.isOnline ? "active" : ""}
-                                image={item.image}
-                            />
-                        );
-                    })} */}
                 </div>
             </div>
         </div>
