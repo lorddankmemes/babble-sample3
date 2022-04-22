@@ -19,7 +19,6 @@ const initialState = {
             ? localStorage.getItem('amount')// maybe kena convert to double
             : 0.0
         : 0.0,
-    rooms: [],
 }
 
 function reducer(state, action) {
@@ -33,8 +32,6 @@ function reducer(state, action) {
         case 'SET_AMOUNT':
             localStorage.setItem('amount', action.payload)
             return { ...state, amount: action.payload }
-        case 'SET_ROOMS':
-            return { ...state, rooms: action.payload }
         case 'CLEAR_USER_PROVIDER':
             localStorage.removeItem('access_token')
             localStorage.removeItem('public_address')
@@ -44,7 +41,6 @@ function reducer(state, action) {
                 access_token: "",
                 public_address: "",
                 amount: 0.0,
-                rooms: [],
             }
         default:
             return state

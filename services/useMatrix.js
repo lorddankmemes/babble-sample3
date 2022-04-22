@@ -4,10 +4,12 @@ import { useContext } from 'react'
 import crypto from 'crypto'
 import axios from 'axios'
 import { User } from "../providers/user-provider"
+import { Chat } from "../providers/chat-provider"
 
 function useMatrixOrg() {
 
     const userContext = useContext(User)
+    const chatContext = useContext(Chat)
 
     const getUserID = () => {
         if (userContext?.state?.public_address == "") {
@@ -187,9 +189,9 @@ function useMatrixOrg() {
     const mGetRoomList = () => {
         console.log("ENTERING GET RROM LIST FUNCTION")
         var rooms = client.getRooms();
-        userContext.dispatch({ type: "SET_ROOMS", payload: rooms })
+        chatContext.dispatch({ type: "SET_ROOMS", payload: rooms })
         console.log(rooms)
-        userContext.state.rooms.forEach(room => {
+        chatContext.state.rooms.forEach(room => {
             console.log(room);
         });
     }

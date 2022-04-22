@@ -6,10 +6,12 @@ import { Fragment } from 'react'
 import UserProfile from '../userProfile/UserProfile';
 import useMatrixOrg from "../../services/useMatrix";
 import { User } from "../../providers/user-provider";
+import { Chat } from "../../providers/chat-provider";
 
 
 const ChatList = () => {
     const userContext = useContext(User)
+    const chatContext = useContext(Chat)
     const { mCreateRoom } = useMatrixOrg()
     const [getAllChats, setAllChats] = useState([
         {
@@ -199,7 +201,7 @@ const ChatList = () => {
             <div className="flex-1 h-[38rem] overflow-y-scroll">
                 <div className=' space-y-4'>
                     {
-                        userContext?.state?.rooms.map((room, index) => {
+                        chatContext?.state?.rooms.map((room, index) => {
                             return (
                                 <ChatListItems
                                     name={room.name}
