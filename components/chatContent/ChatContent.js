@@ -1,13 +1,16 @@
-import React, { Component, useState, createRef, useEffect } from "react";
-import Avatar from "../chatList/Avatar";
-import ChatItem from "./ChatItem";
-import ChatItemMe from "./ChatItemMe";
-import { BsPlusSquare } from "react-icons/bs";
-import { FaPaperPlane } from "react-icons/fa";
+import React, { Component, useState, createRef, useEffect } from "react"
+import Avatar from "../chatList/Avatar"
+import ChatItem from "./ChatItem"
+import ChatItemMe from "./ChatItemMe"
+import { BsPlusSquare } from "react-icons/bs"
+import { FaPaperPlane } from "react-icons/fa"
 
-export default class ChatContent extends Component {
-  messagesEndRef = createRef(null);
-  chatItms = [
+function ChatContent() {
+
+  const [getMsg, setMsg] = useState()
+  const [getChat, setChat] = useState([])
+
+  const chatItms = [
     {
       key: 1,
       image:
@@ -57,93 +60,101 @@ export default class ChatContent extends Component {
       type: "other",
       msg: "I'm taliking about the tutorial",
     },
-  ];
+  ]
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      chat: this.chatItms,
-      msg: "",
-    };
-  }
+  let messagesEndRef = createRef(null)
 
-  scrollToBottom = () => {
-    this.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-  };
+  useEffect(() => {
 
-  componentDidMount() {
     window.addEventListener("keydown", (e) => {
       if (e.keyCode == 13) {
-        if (this.state.msg != "") {
-          this.chatItms.push({
+        if (getMsg != "") {
+          const tempChatList = getChat
+          tempChatList.push({
             key: 1,
             type: "",
-            msg: this.state.msg,
+            msg: getMsg,
             image:
               "https://pbs.twimg.com/profile_images/1116431270697766912/-NfnQHvh_400x400.jpg",
-          });
-          this.setState({ chat: [...this.chatItms] });
-          this.scrollToBottom();
-          this.setState({ msg: "" });
+          })
+          setChat(tempChatList)
+          scrollToBottom()
+          setMsg("")
         }
       }
     });
-    this.scrollToBottom();
+    scrollToBottom();
+
+  })
+
+  useEffect(() => {
+    setChat(chatItms)
+  }, [])
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   }
-  onStateChange = (e) => {
-    this.setState({ msg: e.target.value });
-  };
 
-  render() {
-    return (
-      <div className="relative max-h-full h-full bg-white rounded-lg w-full flex flex-col lg:flex hidden">
-        <div className="bg-indigo-600 flex px-3 items-center text-white p-2 text-base rounded-t-lg">
-          <Avatar
-            isOnline="active"
-            image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU"
-          />
-          <p>Tim Hover</p>
-        </div>
-        <div className="flex-1 overflow-y-scroll p-5 space-y-5">
-          {this.state.chat.map((itm, index) => {
-            return itm.type != '' ? (
-              <ChatItem
-                animationDelay={index + 2}
-                key={itm.key}
-                user={itm.type}
-                msg={itm.msg}
-              // image={itm.image}
-              />
-            ) : (
-              <ChatItemMe
-                animationDelay={index + 2}
-                key={itm.key}
-                user={itm.type}
-                msg={itm.msg}
-              />
-            );
-          })}
-          <div ref={this.messagesEndRef} />
-        </div>
+  const onStateChange = (e) => {
+    setMsg(e.target.value)
+  }
+  return (
+    <div className="relative max-h-full h-full bg-white rounded-lg w-full flex flex-col lg:flex hidden">
+      <div className="bg-indigo-600 flex px-3 items-center text-white p-2 text-base rounded-t-lg">
+        <Avatar
+          isOnline="active"
+          image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU"
+        />
+        <p>Tim Hover</p>
+      </div>
+      <div className="flex-1 overflow-y-scroll p-5 space-y-5">
+        {getChat.map((itm, index) => {
+          return itm.type != '' ? (
+            <ChatItem
+              animationDelay={index + 2}
+              key={itm.key}
+              user={itm.type}
+              msg={itm.msg}
+            // image={itm.image}
+            />
+          ) : (
+            <ChatItemMe
+              animationDelay={index + 2}
+              key={itm.key}
+              user={itm.type}
+              msg={itm.msg}
+            />
+          );
+        })}
+        <div ref={messagesEndRef} />
+      </div>
 
-        <div className='flex-none p-5'>
-          <div>
-            <div className='relative flex w-full'>
-              <span className='absolute inset-y-0 flex-items-center'>
-                <button type='button' className='inline-flex items-center justify-center rounded-full h-12 w-12 transition dration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:otline-none'>
-                  <BsPlusSquare className="h-6 w-6 text-gray-600" />
-                </button>
-              </span>
-              <input type='text' placeholder='type a message here' className='w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-400 pl-12 bg-gray-100 rounded-full py-3 pr-5' onChange={this.onStateChange} value={this.state.msg} />
-              <div className='ml.5'>
-                <button className='inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-100 ease-in-out text-white bg-indigo-600 hover:bg-indigo-400 focus:outline-none'>
-                  <FaPaperPlane className="h-6 w-6 text-white items-center" />
-                </button>
-              </div>
+      <div className='flex-none p-5'>
+        <div>
+          <div className='relative flex w-full'>
+            <span className='absolute inset-y-0 flex-items-center'>
+              <button type='button' className='inline-flex items-center justify-center rounded-full h-12 w-12 transition dration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:otline-none'>
+                <BsPlusSquare className="h-6 w-6 text-gray-600" />
+              </button>
+            </span>
+            <input
+              type='text'
+              placeholder='type a message here'
+              className='w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-400 pl-12 bg-gray-100 rounded-full py-3 pr-5'
+              onChange={onStateChange}
+              value={getMsg}
+
+            />
+            <div className='ml.5'>
+              <button className='inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-100 ease-in-out text-white bg-indigo-600 hover:bg-indigo-400 focus:outline-none'>
+                <FaPaperPlane className="h-6 w-6 text-white items-center" />
+              </button>
             </div>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  )
 }
+
+export default ChatContent

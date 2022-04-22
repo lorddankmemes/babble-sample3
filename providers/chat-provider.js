@@ -12,12 +12,25 @@ function reducer(state, action) {
     switch (action.type) {
         case 'SET_ROOMS':
             return { ...state, rooms: action.payload }
-        // case 'ADD_CONVERSATION': {
-        //     const selectedRoom = state.conversations.find(
-        //         (conversation) => conversation.roomName == action.payload.roomId
-        //     )
-        //     return { ...state, rooms: action.payload }
-        // }
+        case 'ADD_CONVERSATION': {
+            const existChat = state.conversations.find(
+                (conversation) => conversation.roomName == action.payload.roomName
+            )
+
+            const newConversations = existChat
+                ? state.conversations.map((conversation) => {
+                    if (conversation.roomName == action.payload.roomName) {
+                        // letak dalam conversation message
+                        conversation.conversation.push(action.payload.conversation)
+                        return conversation
+                    } else {
+                        return conversation
+                    }
+                }
+                )
+                : [...state.conversations, action.payload];
+            return { ...state, conversations: newConversations }
+        }
         case 'CLEAR_CHAT_PROVIDER':
             return {
                 rooms: [],
