@@ -24,13 +24,13 @@ const initialState = {
 function reducer(state, action) {
     switch (action.type) {
         case 'SET_ACCESS_TOKEN':
-            localStorage.setItem('access_token', action.payload)
+            // localStorage.setItem('access_token', action.payload)
             return { ...state, access_token: action.payload }
         case 'SET_PUBLIC_ADDRESS':
-            localStorage.setItem('public_address', action.payload)
+            // localStorage.setItem('public_address', action.payload)
             return { ...state, public_address: action.payload }
         case 'SET_AMOUNT':
-            localStorage.setItem('amount', action.payload)
+            // localStorage.setItem('amount', action.payload)
             return { ...state, amount: action.payload }
         case 'CLEAR_USER_PROVIDER':
             localStorage.removeItem('access_token')
